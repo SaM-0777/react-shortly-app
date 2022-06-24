@@ -1,0 +1,55 @@
+.app__features {
+    background: hsl(255, 11%, 22%) url("https://svgshare.com/i/JNV.svg");
+    background-repeat: no-repeat;
+    background-position: 100% 80%;
+    width: 100%;
+    margin: 0;
+    padding: 4rem 0;
+}
+
+.app__feature-text {
+    text-align: center;
+}
+
+.app__feature-h1 {
+    font-family: 'poppins', sans-serif;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 992px) {
+    .app__feature-h1 {
+        font-size: 30px;
+    }
+
+    .app__feature-button {
+        padding: 8px 20px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .app__feature-h1 {
+        font-size: 28px;
+    }
+
+    .app__feature-button {
+        padding: 8px 20px;
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .app__features {
+        padding: 3rem 0;
+    }
+
+    .app__feature-h1 {
+        font-size: 26px;
+    }
+
+    .app__feature-button {
+        margin-top: 5px;
+        padding: 8px 20px;
+        font-size: 18px;
+    }
+}
