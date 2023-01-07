@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import validUrl from 'valid-url';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+/*import validUrl from 'valid-url';
+import { CopyToClipboard } from 'react-copy-to-clipboard';*/
 import './Searchbar.css';
 
 /*import { fetchData } from '../../utils/fetchData';*/
@@ -44,10 +44,11 @@ const Searchbar = () => {
     }
   }
 
-  /*useEffect(() => {
-    sessionStorage.setItem("response", JSON.stringify({...response}))
-    sessionStorage.setItem("value", JSON.stringify(value))
-  }, [response, value]);*/
+  useEffect(() => {
+    /*sessionStorage.setItem("response", JSON.stringify({...response}))
+    sessionStorage.setItem("value", JSON.stringify(value))*/
+    return () => {}
+  }, [])
 
   return (
     <div className="app__searchbar" id="search">
