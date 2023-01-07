@@ -3,40 +3,51 @@ import validUrl from 'valid-url';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './Searchbar.css';
 
-import { fetchData } from '../../utils/fetchData';
+/*import { fetchData } from '../../utils/fetchData';*/
 
 
 const Searchbar = () => {
-  const [value, setValue] = useState(() => {
-    const savedValue = sessionStorage.getItem("value")
-    const initialValue = JSON.parse(savedValue)
-    return initialValue || ""
-  })
-  const [response, setResponse] = useState(() => {
-    const savedResponse = sessionStorage.getItem("response")
-    const initialResponse = JSON.parse(savedResponse)
-    return initialResponse || {}
-  })
-  const [isCopied, setIsCopied] = useState(false)
+  const [value, setValue] = useState("")
+  const [response, setResponse] = useState(null)
+  const [loading, setLoading] = useState(false)
+  // const [isCopied, setIsCopied] = useState(false)
 
   const handleClick = async () => {
-    if (value === "") setResponse({ error: "The input field is empty" })
-    else {
-      if (validUrl.isUri(value)) {
-        const data = await fetchData(value);
-        if (data.error) setResponse({ error: data.error.message })
-        else setResponse({ data })
-      }
-      else setResponse({ error: "Enter a valid url" });
+    setLoading(true)
+    if (value === "") {
+      setResponse({ error: "Provide a valid URL" })
+      setLoading(false)
     }
-    
+    else {
+      try {
+        const response = await fetch("https://pleasant-headscarf-newt.cyclic.app/api/url-shorten/create", {
+          method: 'POST',
+          // mode: 'cors', // no-cors, *cors, same-origin
+          headers: {
+            'auth-token': "",
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: JSON.stringify({
+            redirectUrl: value
+          })
+        })
+        const jsonResponse = JSON.stringify(response)
+        console.log("Hello: ", jsonResponse)
+        console.log("Hello: ", response)
+        setResponse({ ...jsonResponse })
+        setLoading(false)
+      } catch (error) {
+        setResponse({ error: error })
+        setLoading(false)
+      }
+    }
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     sessionStorage.setItem("response", JSON.stringify({...response}))
     sessionStorage.setItem("value", JSON.stringify(value))
-  }, [response, value]);
-
+  }, [response, value]);*/
 
   return (
     <div className="app__searchbar" id="search">
@@ -57,31 +68,31 @@ const Searchbar = () => {
             type="button"
             onClick={handleClick}
           >
-            Shorten It!
+            {loading ? "Loading.." : "Shorten It!"}
           </button>
         </div>
-        {response.error ? (
+        {response?.error && (
           <div className="app__searchbar-error app__searchbar-response_wrapper">
-            <h3 className="error-message">{response.error}</h3>
+            <h3 className="error-message">{response?.error}</h3>
           </div>
-        ) : null}
-        {response.data ? (
+        )}
+        {response?.data && (
           <div className="app__searchabar-success app__searchbar-response_wrapper">
             <div className="searchbar_success">
-              <h2 className="success-text">{response.data.id}</h2>
+              <h2 className="success-text">{response?.data?.id}</h2>
             </div>
             <div className="copy-text">
-              <CopyToClipboard
+              {/*<CopyToClipboard
                 text={response.data.id}
                 onCopy={() => setIsCopied(true)}
               >
                 <button className="copy-button custom__button" type="button">
                   {isCopied ? "Copied" : "Copy"}
                 </button>
-              </CopyToClipboard>
+              </CopyToClipboard>*/}
             </div>
           </div>
-        ) : null}
+        )}
       </div>
       <div className="app__searchbar-right">
         <div className="right-gap" />
